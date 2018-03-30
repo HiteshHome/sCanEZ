@@ -68,6 +68,7 @@ public class History_Fragment extends BaseFragment {
                 mainInterfaces.DashBoard();
             }
         });
+        ((BaseActivity)getActivity()).getImgToolBarMenu().setVisibility(View.GONE);
         ((BaseActivity) getActivity()).getTextViewToolBarTitle().setText("History");
         ((BaseActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }

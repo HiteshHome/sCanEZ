@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:background="@color/colorWhite"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="@dimen/dp_50"
+        android:src="@drawable/hitesh"
+        android:layout_gravity="center"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/colorPrimaryDark"/>
+    <TextView
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hitesh Manwani"
+        android:textSize="@dimen/sp_20"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"/>
+    <TextView
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Android Developer"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp_10"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickGmail_hitesh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gmail"/>
+
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickTwitter_hitesh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/twitter"/>
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickInstagram_hitesh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/instagram"/>
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickSkype_hitesh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/skype"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlack"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="@dimen/dp_20"
+        android:src="@drawable/harsh"
+        android:layout_gravity="center"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/colorPrimaryDark"/>
+    <TextView
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Harsh Ahiraokar"
+        android:textSize="@dimen/sp_20"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"/>
+    <TextView
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Android Developer"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorBlack"/>
+    <LinearLayout
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickGmail_harsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gmail"/>
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickTwitter_harsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/twitter"/>
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickSkype_harsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/skype"/>
+        <ImageView
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:id="@+id/clickBlogger_harsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/blogger"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/click_rateus"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_5"
+        android:gravity="center"
+        android:text="Rate Us on Play Store"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        android:textSize="@dimen/sp_20"/>
+</LinearLayout>
+</ScrollView>

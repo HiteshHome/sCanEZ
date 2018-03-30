@@ -2,12 +2,15 @@ package com.scanez.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,11 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.scanez.R;
+import com.scanez.fragment.About_Us_Fragment;
 import com.scanez.fragment.Dashboard_Fragment;
 import com.scanez.fragment.FullScanner_Fragment;
 import com.scanez.fragment.History_Fragment;
 import com.scanez.fragment.Splash_Fragment;
 import com.scanez.interfaces.MainInterfaces;
+import com.scanez.permission.PiemissionsUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,16 +60,18 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
-    @BindView(R.id.selectqr)
-    LinearLayout selectqr;
-    @BindView(R.id.selectbarcode)
-    LinearLayout selectbarcode;
+
     @BindView(R.id.scan_qrcode)
     LinearLayout scanQrcode;
     @BindView(R.id.scan_barcode)
     LinearLayout scanBarcode;
     @BindView(R.id.click_history)
     LinearLayout clickHistory;
+    @BindView(R.id.imgToolBarMenu)
+    ImageView imgToolBarMenu;
+    @BindView(R.id.click_aboutus)
+    LinearLayout clickAboutus;
+
     private float lastTranslate = 0.0f;
 
     public ImageView getImgToolBarBack() {
@@ -139,21 +146,6 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
         this.mDrawerToggle = mDrawerToggle;
     }
 
-    public LinearLayout getSelectqr() {
-        return selectqr;
-    }
-
-    public void setSelectqr(LinearLayout selectqr) {
-        this.selectqr = selectqr;
-    }
-
-    public LinearLayout getSelectbarcode() {
-        return selectbarcode;
-    }
-
-    public void setSelectbarcode(LinearLayout selectbarcode) {
-        this.selectbarcode = selectbarcode;
-    }
 
     public LinearLayout getScanQrcode() {
         return scanQrcode;
@@ -171,18 +163,21 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
         this.scanBarcode = scanBarcode;
     }
 
+    public ImageView getImgToolBarMenu() {
+        return imgToolBarMenu;
+    }
+
+    public void setImgToolBarMenu(ImageView imgToolBarMenu) {
+        this.imgToolBarMenu = imgToolBarMenu;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        PiemissionsUtils.init(this);
 
-        imgToolBarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         imgToolBarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,24 +210,29 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
         };
 
         drawerLayout.addDrawerListener(mDrawerToggle);
-        scanBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenFullScanner();
-            }
-        });
-        scanQrcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenFullScanner();
-            }
-        });
         clickHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 OpenCodeHistory();
             }
         });
+        clickAboutus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenAboutUs();
+            }
+        });
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PiemissionsUtils.onRequestResult(requestCode, permissions, grantResults);
+    }
+    void onSettingClick() {
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.menu);
+        toolBar.setOverflowIcon(drawable);
+        setSupportActionBar(toolBar);
     }
 
     public void replaceFragment(Fragment mFragment, int id, String tag, boolean addToStack) {
@@ -270,7 +270,7 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
         if (fragment instanceof Splash_Fragment || fragment instanceof Dashboard_Fragment) {
             finish();
             hideKeyboard();
-        } else if (fragment instanceof FullScanner_Fragment || fragment instanceof History_Fragment) {
+        } else if (fragment instanceof FullScanner_Fragment || fragment instanceof History_Fragment || fragment instanceof About_Us_Fragment) {
             DashBoard();
         } else {
             hideKeyboard();
@@ -297,4 +297,11 @@ public class BaseActivity extends AppCompatActivity implements MainInterfaces {
     public void OpenCodeHistory() {
         replaceFragment(new History_Fragment(), R.id.container, History_Fragment.class.getName(), false);
     }
+
+    @Override
+    public void OpenAboutUs() {
+        replaceFragment(new About_Us_Fragment(), R.id.container, About_Us_Fragment.class.getName(), false);
+    }
+
+
 }

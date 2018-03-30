@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp_16"
-                        android:text="Scan QR Code"/>
+                        android:text="@string/scan_qr_code"/>
                 </LinearLayout>
                 <View
                     android:layout_marginTop="@dimen/dp_10"
@@ -97,7 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sp_16"
-                        android:text="Scan Barcode"/>
+                        android:text="@string/scan_barcode"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -206,7 +206,7 @@
                 android:textSize="@dimen/sp_18"
                 android:singleLine="true"
                 android:textAllCaps="false"
-                android:hint="Name or Id"
+                android:hint="@string/name"
                 android:text=""/>
 
                 <Button

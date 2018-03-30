@@ -28,5 +28,8 @@
     <dimen name="dp_160">160dp</dimen>
     <dimen name="dp_185">185dp</dimen>
     <dimen name="dp_130">130dp</dimen>
+    <dimen name="dp_230">230dp</dimen>
+    <dimen name="dp_250">250dp</dimen>
+    <dimen name="dp_300">300dp</dimen>
 
 </resources>

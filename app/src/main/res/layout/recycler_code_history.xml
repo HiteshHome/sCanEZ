@@ -6,11 +6,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <LinearLayout
+        android:elevation="@dimen/dp_10"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp_10">
+        android:layout_marginBottom="@dimen/dp_5">
 
         <LinearLayout
             android:layout_marginRight="@dimen/dp_10"
@@ -25,12 +26,38 @@
             />
         </LinearLayout>
         <LinearLayout
+            android:layout_gravity="center"
             android:layout_marginRight="@dimen/dp_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name :"/>
+                <TextView
+                    android:id="@+id/code_note"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:textSize="@dimen/sp_15"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text=""/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -75,43 +102,23 @@
         </FrameLayout>
                 <ImageView
                     android:layout_marginLeft="@dimen/dp_20"
+                    android:id="@+id/code_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delete"/>
+
+                <ImageView
+                    android:id="@+id/code_share"
+                    android:layout_marginLeft="@dimen/dp_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/share"/>
 </LinearLayout>
-            <ImageView
-                android:id="@+id/code_delete"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/delete"/>
+
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:textSize="@dimen/sp_18"
-            android:textColor="@color/colorBlack"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Note :"/>
-        <TextView
-            android:id="@+id/code_note"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:textSize="@dimen/sp_15"
-            android:textColor="@color/colorBlack"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:singleLine="true"
-            android:text=""/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="@dimen/dp_2"
+        android:background="#50000000"/>
+   </LinearLayout>

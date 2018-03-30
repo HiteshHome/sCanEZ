@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -226,7 +227,19 @@ public void onPause() {
 
     @Override
     public void setToolbarForFragment() {
-            ((BaseActivity)getActivity()).getAppbar().setVisibility(View.GONE);
-            ((BaseActivity)getActivity()).getToolBar().setVisibility(View.GONE);
+            ((BaseActivity)getActivity()).getAppbar().setVisibility(View.VISIBLE);
+            ((BaseActivity)getActivity()).getToolBar().setVisibility(View.VISIBLE);
+            ((BaseActivity)getActivity()).getImgToolBarBack().setVisibility(View.VISIBLE);
+            ((BaseActivity)getActivity()).getImgToolBarHome().setVisibility(View.GONE);
+            ((BaseActivity)getActivity()).getImgToolBarMenu().setVisibility(View.VISIBLE);
+            ((BaseActivity)getActivity()).getTextViewToolBarTitle().setText("sCanEz");
+            ((BaseActivity)getActivity()).getImgToolBarBack().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            mainInterfaces.DashBoard();
+                    }
+            });
+            ((BaseActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
     }
 }

@@ -13,4 +13,7 @@ public interface MainInterfaces {
     void OpenFullScanner();
 
     void OpenCodeHistory();
+
+    void OpenAboutUs();
+
 }

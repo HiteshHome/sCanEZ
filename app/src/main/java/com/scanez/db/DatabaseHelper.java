@@ -16,8 +16,8 @@ import java.util.List;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "codeDatas.db";
-    public static final String TABLE_NAME = "Code_table";
+    public static final String DATABASE_NAME = "code_datas.db";
+    public static final String TABLE_NAME = "code_Tables";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "NOTE";
     public static final String COL_3 = "TYPE";
@@ -88,19 +88,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return storeProducts;
     }
 
-    public Data findProduct(String name){
-        String query = "Select * FROM "	+ TABLE_NAME + " WHERE " + COL_2 + " = " + "NOTE";
+    public Data findProduct(String NOTE){
+        //String query = "Select * FROM "	+ TABLE_NAME + " WHERE " + COL_2 + " = " + NOTE;
+
+        String query = "select * from " + TABLE_NAME + " where NOTE=?";
+
         SQLiteDatabase db = getWritableDatabase();
         Data mProduct = null;
-        if (checkIfExist(name)) {
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
+        if (checkIfExist(NOTE)) {
 
-                int id = Integer.parseInt(cursor.getString(0));
-                String names = cursor.getString(1);
-                String type = cursor.getString(2);
-                String date_time = cursor.getString(3);
-                String image_path = cursor.getString(4);
+            Cursor cursor = db.rawQuery(query, new String[] {NOTE});
+
+            if (cursor.moveToFirst()) {
+                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(COL_1)));
+                String names = cursor.getString(cursor.getColumnIndex(COL_2));
+                String type = cursor.getString(cursor.getColumnIndex(COL_3));
+                String date_time = cursor.getString(cursor.getColumnIndex(COL_4));
+                String image_path = cursor.getString(cursor.getColumnIndex(COL_5));
 
                 mProduct = new Data(id, names, type, date_time, image_path);
             }
@@ -126,7 +130,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
 
     }
-
 
     public boolean  isMasterEmpty() {
 

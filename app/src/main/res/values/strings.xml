@@ -34,6 +34,9 @@
     <string name="scan_barcode">Scan Barcode</string>
     <string name="scan_qr_code">Scan Qr Code</string>
     <string name="app_version">App Version :</string>
+    <string name="i_am_an_android_developer_who_likes_to_play_around_with_things_when_have_some_time_to_kill_so_i_came_up_with_this_pet_project">\u00A0\u00A0\u00A0\u00A0\u00A0I am an Android developer who likes to play around with things when have some time to kill, so i came up with this pet project.</string>
+    <string name="_1_0_0">1.0.0</string>
+    <string name="name">Name</string>
     <bool name="cameraPreviewShouldFillView">true</bool>
 
 

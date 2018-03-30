@@ -7,13 +7,13 @@
     android:gravity="center"
     android:minWidth="300dp"
     android:minHeight="200dp"
-    android:background="@color/colorWhite"
+    android:background="@android:color/transparent"
     android:padding="5dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorWhite">
+        android:background="@drawable/dialog_background">
     <ImageView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:ems="10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:hint="By Name"

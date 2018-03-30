@@ -1,8 +1,13 @@
 package com.scanez.fragment;
 
+import android.Manifest;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -31,7 +36,9 @@ import com.scanez.activity.BaseActivity;
 import com.scanez.activity.MainActivity;
 import com.scanez.db.DatabaseHelper;
 import com.scanez.model.Data;
-import com.squareup.picasso.Picasso;
+import com.scanez.permission.PiemissionsCallback;
+import com.scanez.permission.PiemissionsRequest;
+import com.scanez.permission.PiemissionsUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +47,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -59,7 +68,7 @@ import static android.content.Context.WINDOW_SERVICE;
 public class Dashboard_Fragment extends BaseFragment {
 
     String inputValue, Qrnotes;
-    String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/";
+    String savePath = Environment.getExternalStorageDirectory().getPath();
     Bitmap bitmapQr, bitmapBarcode;
     QRGEncoder qrgEncoder;
     private static final int WHITE = 0xFFFFFFFF;
@@ -87,7 +96,11 @@ public class Dashboard_Fragment extends BaseFragment {
     @BindView(R.id.btn_SearchCode)
     Button btnSearchCode;
     DatabaseHelper myDb;
-
+    private static final int PERMISSIONS_CODE = 13370;
+    private static final String[] PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
+    };
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,6 +109,49 @@ public class Dashboard_Fragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         unbinder = ButterKnife.bind(this, view);
         myDb = new DatabaseHelper(getActivity());
+
+        ((BaseActivity)getActivity()).getScanQrcode().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final PiemissionsRequest requests = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                requests.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
+                        mainInterfaces.OpenFullScanner();
+                    }
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(requests);
+            }
+        });
+
+        ((BaseActivity)getActivity()).getScanBarcode().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final PiemissionsRequest requests = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                requests.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
+                        mainInterfaces.OpenFullScanner();
+                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(requests);
+            }
+        });
         return view;
     }
 
@@ -105,6 +161,7 @@ public class Dashboard_Fragment extends BaseFragment {
         ((BaseActivity) getActivity()).getToolBar().setVisibility(View.VISIBLE);
         ((BaseActivity) getActivity()).getImgToolBarHome().setVisibility(View.VISIBLE);
         ((BaseActivity) getActivity()).getImgToolBarBack().setVisibility(View.GONE);
+        ((BaseActivity)getActivity()).getImgToolBarMenu().setVisibility(View.GONE);
         ((BaseActivity) getActivity()).getTextViewToolBarTitle().setText("sCanEz");
         ((BaseActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -118,20 +175,84 @@ public class Dashboard_Fragment extends BaseFragment {
 
     @OnClick(R.id.clickScanQRCode)
     public void onClickedQRCodeScanner() {
-        mainInterfaces.OpenFullScanner();
+
+        final PiemissionsRequest request = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+        request.setCallback(new PiemissionsCallback() {
+            @Override
+            public void onGranted() {
+                Log.e("log----::", "Permission Granted");
+                mainInterfaces.OpenFullScanner();
+            }
+
+            @Override
+            public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                Log.e("log---::", "Permission Denied");
+
+                return true;
+            }
+        });
+        PiemissionsUtils.requestPermission(request);
     }
 
     @OnClick({R.id.txt_clickScanQRCode, R.id.clickToBarcode, R.id.txt_clickToBarcode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.txt_clickScanQRCode:
-                mainInterfaces.OpenFullScanner();
+
+                final PiemissionsRequest request = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                request.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
+                        mainInterfaces.OpenFullScanner();
+                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(request);
                 break;
             case R.id.clickToBarcode:
-                mainInterfaces.OpenFullScanner();
+
+                final PiemissionsRequest requests = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                requests.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
+                        mainInterfaces.OpenFullScanner();
+                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(requests);
                 break;
             case R.id.txt_clickToBarcode:
-                mainInterfaces.OpenFullScanner();
+
+                final PiemissionsRequest requesst = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                requesst.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
+                        mainInterfaces.OpenFullScanner();
+                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(requesst);
                 break;
         }
     }
@@ -140,265 +261,89 @@ public class Dashboard_Fragment extends BaseFragment {
     public void onClickeView(View view) {
         switch (view.getId()) {
             case R.id.linear_ClickById:
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                View mView = getLayoutInflater().inflate(R.layout.dialog_by_id, null);
-                mBuilder.setView(mView);
-                dialog = mBuilder.create();
-                dialog.show();
-                Button qr = (Button) mView.findViewById(R.id.btn_GenerateQR);
-                Button barcode = (Button) mView.findViewById(R.id.btn_GenerateBarcode);
-                final EditText id = (EditText) mView.findViewById(R.id.edt_id);
-
-                qr.setOnClickListener(new View.OnClickListener() {
+                final PiemissionsRequest requests = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                requests.setCallback(new PiemissionsCallback() {
                     @Override
-                    public void onClick(View v) {
-                        inputValue = id.getText().toString().trim();
-                        if (inputValue.length() > 0) {
-                            dialog.dismiss();
-                            WindowManager manager = (WindowManager) getActivity().getSystemService(WINDOW_SERVICE);
-                            Display display = manager.getDefaultDisplay();
-                            Point point = new Point();
-                            display.getSize(point);
-                            int width = point.x;
-                            int height = point.y;
-                            int smallerDimension = width < height ? width : height;
-                            smallerDimension = smallerDimension * 3 / 4;
+                    public void onGranted() {
+                        Log.e("log----::", "Permission Granted");
 
-                            qrgEncoder = new QRGEncoder(
-                                    inputValue, null,
-                                    QRGContents.Type.TEXT,
-                                    smallerDimension);
+                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                        View mView = getLayoutInflater().inflate(R.layout.dialog_by_id, null);
 
-                            try {
-                                bitmapQr = qrgEncoder.encodeAsBitmap();
-                            } catch (WriterException e) {
-                                e.printStackTrace();
-                            }
+                        mBuilder.setView(mView);
+                        dialog = mBuilder.create();
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                            View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
-                            mBuilder.setView(mView);
+                        Button qr = (Button) mView.findViewById(R.id.btn_GenerateQR);
+                        Button barcode = (Button) mView.findViewById(R.id.btn_GenerateBarcode);
+                        final EditText id = (EditText) mView.findViewById(R.id.edt_id);
 
-                            ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
-                            Button saveQr = (Button) mView.findViewById(R.id.btn_SaveQR);
-                            final EditText note = (EditText) mView.findViewById(R.id.edt_note);
+                        qr.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inputValue = id.getText().toString().trim();
+                                if (inputValue.length() > 0) {
+                                    dialog.dismiss();
+                                    WindowManager manager = (WindowManager) getActivity().getSystemService(WINDOW_SERVICE);
+                                    Display display = manager.getDefaultDisplay();
+                                    Point point = new Point();
+                                    display.getSize(point);
+                                    int width = point.x;
+                                    int height = point.y;
+                                    int smallerDimension = width < height ? width : height;
+                                    smallerDimension = smallerDimension * 3 / 4;
 
-                            qr.setImageBitmap(bitmapQr);
+                                    qrgEncoder = new QRGEncoder(
+                                            inputValue, null,
+                                            QRGContents.Type.TEXT,
+                                            smallerDimension);
 
-                            dialog = mBuilder.create();
-                            dialog.show();
-
-                            saveQr.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
                                     try {
-
-                                        final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
-                                        FileOutputStream out = null;
-                                        final Bitmap bitmap = bitmapQr;
-                                        try {
-                                            out = new FileOutputStream(file);
-                                            if (bitmap != null) {
-                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                                            } else {
-                                                throw new FileNotFoundException();
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        } finally {
-                                            if (out != null) {
-                                                out.flush();
-                                                out.close();
-
-                                                if (bitmap != null) {
-
-
-                                                    /*save = QRGSaver.save(savePath, id.getText().toString().trim(), bitmapQr, QRGContents.ImageType.IMAGE_JPEG);
-
-                                                    result = save ? "Image Saved" : "Image Not Saved";
-                                                    Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();*/
-
-                                                    Date c = Calendar.getInstance().getTime();
-                                                    System.out.println("Current time => " + c);
-
-                                                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                                                    String formattedDate = df.format(c);
-
-                                                    Qrnotes = note.getText().toString();
-
-                                                    Data newProduct = new Data(Qrnotes, "Qr", formattedDate, file.getPath());
-                                                    myDb.addProduct(newProduct);
-
-                                                    dialog.dismiss();
-                                                    Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
-
-                                                }
-                                            }
-                                        }
-
-                                    } catch (Exception e) {
+                                        bitmapQr = qrgEncoder.encodeAsBitmap();
+                                    } catch (WriterException e) {
                                         e.printStackTrace();
                                     }
-                                }
-                            });
 
-                        } else {
-                            id.setError("Required");
-                        }
-                    }
-                });
+                                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                                    View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                    mBuilder.setView(mView);
 
-                barcode.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inputValue = id.getText().toString().trim();
+                                    ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
+                                    Button saveQr = (Button) mView.findViewById(R.id.btn_SaveQR);
+                                    final EditText note = (EditText) mView.findViewById(R.id.edt_note);
 
-                        if (inputValue.length() > 0) {
-                            try {
-                                dialog.dismiss();
+                                    qr.setImageBitmap(bitmapQr);
 
-                                bitmapBarcode = encodeAsBitmap(id.getText().toString(), BarcodeFormat.CODE_128, 600, 300);
+                                    dialog = mBuilder.create();
+                                    dialog.show();
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                                View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
-                                mBuilder.setView(mView);
-
-                                ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
-                                Button saveBarcode = (Button) mView.findViewById(R.id.btn_SaveQR);
-                                final EditText note = (EditText) mView.findViewById(R.id.edt_note);
-
-                                qr.setImageBitmap(bitmapBarcode);
-
-                                dialog = mBuilder.create();
-                                dialog.show();
-
-                                saveBarcode.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        try {
-
-                                            final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
-                                            FileOutputStream outs = null;
-                                            final Bitmap bitmap = bitmapBarcode;
+                                    saveQr.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
                                             try {
-                                                outs = new FileOutputStream(file);
-                                                if (bitmap != null) {
-                                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outs);
+                                                if (note.getText().toString().length() == 0) {
+                                                    note.setError("Required");
                                                 } else {
-                                                    throw new FileNotFoundException();
-                                                }
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            } finally {
-                                                if (outs != null) {
-                                                    outs.flush();
-                                                    outs.close();
 
-                                                    if (bitmap != null) {
-
-                                                        Date c = Calendar.getInstance().getTime();
-                                                        System.out.println("Current time => " + c);
-
-                                                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                                                        String formattedDate = df.format(c);
-
-                                                        Qrnotes = note.getText().toString();
-
-                                                        Data newProduct = new Data(Qrnotes, "Barcode", formattedDate, file.getPath());
-                                                        myDb.addProduct(newProduct);
-
-                                                        dialog.dismiss();
-                                                        Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
-
-                                                    }
-                                                }
-                                            }
-                                        } catch (Exception es) {
-                                            es.printStackTrace();
-                                        }
-                                    }
-                                });
-
-                            } catch (WriterException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            id.setError("Required");
-                        }
-                    }
-                });
-
-                break;
-            case R.id.linear_ClickByName:
-
-                AlertDialog.Builder mBuilders = new AlertDialog.Builder(getActivity());
-                View mViews = getLayoutInflater().inflate(R.layout.dialog_by_name, null);
-                mBuilders.setView(mViews);
-                dialog = mBuilders.create();
-                dialog.show();
-                Button qrs = (Button) mViews.findViewById(R.id.btn_GenerateQRasName);
-                Button barcodes = (Button) mViews.findViewById(R.id.btn_GenerateBarcodeAsName);
-                final EditText ids = (EditText) mViews.findViewById(R.id.edt_name);
-
-                qrs.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inputValue = ids.getText().toString().trim();
-                        if (inputValue.length() > 0) {
-                            dialog.dismiss();
-                            WindowManager manager = (WindowManager) getActivity().getSystemService(WINDOW_SERVICE);
-                            Display display = manager.getDefaultDisplay();
-                            Point point = new Point();
-                            display.getSize(point);
-                            int width = point.x;
-                            int height = point.y;
-                            int smallerDimension = width < height ? width : height;
-                            smallerDimension = smallerDimension * 3 / 4;
-
-                            qrgEncoder = new QRGEncoder(
-                                    inputValue, null,
-                                    QRGContents.Type.TEXT,
-                                    smallerDimension);
-                            try {
-                                bitmapQr = qrgEncoder.encodeAsBitmap();
-
-                                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                                View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
-                                mBuilder.setView(mView);
-
-                                ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
-                                Button saveQr = (Button) mView.findViewById(R.id.btn_SaveQR);
-                                final EditText note = (EditText) mView.findViewById(R.id.edt_note);
-
-                                qr.setImageBitmap(bitmapQr);
-
-                                dialog = mBuilder.create();
-                                dialog.show();
-
-                                saveQr.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        boolean save;
-                                        String result;
-                                        try {
-                                                final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
-                                                FileOutputStream out = null;
-                                                final Bitmap bitmap = bitmapQr;
-                                                try {
-                                                    out = new FileOutputStream(file);
-                                                    if (bitmap != null) {
-                                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                                                    } else {
-                                                        throw new FileNotFoundException();
-                                                    }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                } finally {
-                                                    if (out != null) {
+                                                    File myDir = new File(savePath + "/sCanEz");
+                                                    myDir.mkdirs();
+                                                    Random generator = new Random();
+                                                    int n = 10000;
+                                                    n = generator.nextInt(n);
+                                                    String fname = "Image-"+ n +".jpg";
+                                                    File file = new File (myDir, fname);
+                                                    if (file.exists ()) file.delete ();
+                                                    try {
+                                                        FileOutputStream out = new FileOutputStream(file);
+                                                        bitmapQr.compress(Bitmap.CompressFormat.JPEG, 90, out);
                                                         out.flush();
                                                         out.close();
 
-                                                        if (bitmap != null) {
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
                                                             Date c = Calendar.getInstance().getTime();
                                                             System.out.println("Current time => " + c);
 
@@ -414,104 +359,350 @@ public class Dashboard_Fragment extends BaseFragment {
                                                             Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
 
                                                         }
-                                                    }
-                                                }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
 
-                                    }
-                                });
 
-                            } catch (WriterException e) {
-                                Log.v(TAG, e.toString());
-                            }
-                        } else {
-                            ids.setError("Required");
-                        }
-                    }
-                });
 
-                barcodes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inputValue = ids.getText().toString().trim();
-
-                        if (inputValue.length() > 0) {
-                            try {
-                                dialog.dismiss();
-
-                                bitmapBarcode = encodeAsBitmap(ids.getText().toString(), BarcodeFormat.CODE_128, 600, 300);
-
-                                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                                View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
-                                mBuilder.setView(mView);
-
-                                ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
-                                Button saveBarcode = (Button) mView.findViewById(R.id.btn_SaveQR);
-                                final EditText note = (EditText) mView.findViewById(R.id.edt_note);
-
-                                qr.setImageBitmap(bitmapBarcode);
-
-                                dialog = mBuilder.create();
-                                dialog.show();
-
-                                saveBarcode.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        try {
-
-                                            final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
-                                            FileOutputStream outs = null;
-                                            final Bitmap bitmap = bitmapBarcode;
-                                            try {
-                                                outs = new FileOutputStream(file);
-                                                if (bitmap != null) {
-                                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outs);
-                                                } else {
-                                                    throw new FileNotFoundException();
-                                                }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            } finally {
-                                                if (outs != null) {
-                                                    outs.flush();
-                                                    outs.close();
+                                            }
+                                        }
+                                    });
 
-                                                    if (bitmap != null) {
+                                } else {
+                                    id.setError("Required");
+                                }
+                            }
+                        });
 
-                                                        Date c = Calendar.getInstance().getTime();
-                                                        System.out.println("Current time => " + c);
+                        barcode.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inputValue = id.getText().toString().trim();
 
-                                                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                                                        String formattedDate = df.format(c);
+                                if (inputValue.length() > 0) {
+                                    try {
+                                        dialog.dismiss();
 
-                                                        Qrnotes = note.getText().toString();
+                                        bitmapBarcode = encodeAsBitmap(id.getText().toString(), BarcodeFormat.CODE_128, 600, 300);
 
-                                                        Data newProduct = new Data(Qrnotes, "Barcode", formattedDate, file.getPath());
-                                                        myDb.addProduct(newProduct);
+                                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                                        View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                        mBuilder.setView(mView);
 
-                                                        dialog.dismiss();
-                                                        Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
+                                        ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
+                                        Button saveBarcode = (Button) mView.findViewById(R.id.btn_SaveQR);
+                                        final EditText note = (EditText) mView.findViewById(R.id.edt_note);
 
+                                        qr.setImageBitmap(bitmapBarcode);
+
+                                        dialog = mBuilder.create();
+                                        dialog.show();
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+                                        saveBarcode.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                try {
+                                                    if (note.getText().toString().length() == 0) {
+                                                        note.setError("Required");
+                                                    } else {
+                                                        File myDir = new File(savePath + "/sCanEz");
+                                                        myDir.mkdirs();
+                                                        Random generator = new Random();
+                                                        int n = 10000;
+                                                        n = generator.nextInt(n);
+                                                        String fname = "Image-"+ n +".jpg";
+                                                        File file = new File (myDir, fname);
+                                                        if (file.exists ()) file.delete ();
+                                                        try {
+                                                            FileOutputStream out = new FileOutputStream(file);
+                                                            bitmapBarcode.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                                            out.flush();
+                                                            out.close();
+
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                                Date c = Calendar.getInstance().getTime();
+                                                                System.out.println("Current time => " + c);
+
+                                                                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                                                                String formattedDate = df.format(c);
+
+                                                                Qrnotes = note.getText().toString();
+
+                                                                Data newProduct = new Data(Qrnotes, "Barcode", formattedDate, file.getPath());
+                                                                myDb.addProduct(newProduct);
+
+                                                                dialog.dismiss();
+                                                                Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
                                                     }
+                                                } catch (Exception es) {
+                                                    es.printStackTrace();
                                                 }
                                             }
-                                        } catch (Exception es) {
-                                            es.printStackTrace();
-                                        }
-                                    }
-                                });
+                                        });
 
-                            } catch (WriterException e) {
-                                e.printStackTrace();
+                                    } catch (WriterException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    id.setError("Required");
+                                }
                             }
-                        } else {
-                            ids.setError("Required");
-                        }
+                        });                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
                     }
                 });
+                PiemissionsUtils.requestPermission(requests);
 
+
+                break;
+            case R.id.linear_ClickByName:
+                final PiemissionsRequest request = new PiemissionsRequest(PERMISSIONS_CODE, PERMISSIONS);
+                request.setCallback(new PiemissionsCallback() {
+                    @Override
+                    public void onGranted() {
+                        AlertDialog.Builder mBuilders = new AlertDialog.Builder(getActivity());
+                        View mViews = getLayoutInflater().inflate(R.layout.dialog_by_name, null);
+                        mBuilders.setView(mViews);
+                        dialog = mBuilders.create();
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        Button qrs = (Button) mViews.findViewById(R.id.btn_GenerateQRasName);
+                        Button barcodes = (Button) mViews.findViewById(R.id.btn_GenerateBarcodeAsName);
+                        final EditText ids = (EditText) mViews.findViewById(R.id.edt_name);
+
+                        qrs.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inputValue = ids.getText().toString().trim();
+                                if (inputValue.length() > 0) {
+                                    dialog.dismiss();
+                                    WindowManager manager = (WindowManager) getActivity().getSystemService(WINDOW_SERVICE);
+                                    Display display = manager.getDefaultDisplay();
+                                    Point point = new Point();
+                                    display.getSize(point);
+                                    int width = point.x;
+                                    int height = point.y;
+                                    int smallerDimension = width < height ? width : height;
+                                    smallerDimension = smallerDimension * 3 / 4;
+
+                                    qrgEncoder = new QRGEncoder(
+                                            inputValue, null,
+                                            QRGContents.Type.TEXT,
+                                            smallerDimension);
+                                    try {
+                                        bitmapQr = qrgEncoder.encodeAsBitmap();
+
+                                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                                        View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                        mBuilder.setView(mView);
+
+                                        ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
+                                        Button saveQr = (Button) mView.findViewById(R.id.btn_SaveQR);
+                                        final EditText note = (EditText) mView.findViewById(R.id.edt_note);
+
+                                        qr.setImageBitmap(bitmapQr);
+
+                                        dialog = mBuilder.create();
+                                        dialog.show();
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        saveQr.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                boolean save;
+                                                String result;
+                                                try {
+                                                    if (note.getText().toString().length() == 0) {
+                                                        note.setError("Required");
+                                                    } else {
+                                                    /*final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
+                                                    FileOutputStream out = null;
+                                                    final Bitmap bitmap = bitmapQr;
+                                                    try {
+                                                        out = new FileOutputStream(file);
+                                                        if (bitmap != null) {
+                                                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                                        } else {
+                                                            throw new FileNotFoundException();
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    } finally {
+                                                        if (out != null) {
+                                                            out.flush();
+                                                            out.close();
+
+                                                            if (bitmap != null) {*/
+                                                        File myDir = new File(savePath + "/sCanEz");
+                                                        myDir.mkdirs();
+                                                        Random generator = new Random();
+                                                        int n = 10000;
+                                                        n = generator.nextInt(n);
+                                                        String fname = "Image-"+ n +".jpg";
+                                                        File file = new File (myDir, fname);
+                                                        if (file.exists ()) file.delete ();
+                                                        try {
+                                                            FileOutputStream out = new FileOutputStream(file);
+                                                            bitmapQr.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                                            out.flush();
+                                                            out.close();
+
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+
+                                                                Date c = Calendar.getInstance().getTime();
+                                                                System.out.println("Current time => " + c);
+
+                                                                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                                                                String formattedDate = df.format(c);
+
+                                                                Qrnotes = note.getText().toString();
+
+                                                                Data newProduct = new Data(Qrnotes, "Qr", formattedDate, file.getPath());
+                                                                myDb.addProduct(newProduct);
+
+                                                                dialog.dismiss();
+                                                                Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
+                                                    }
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
+                                        });
+
+                                    } catch (WriterException e) {
+                                        Log.v(TAG, e.toString());
+                                    }
+                                } else {
+                                    ids.setError("Required");
+                                }
+                            }
+                        });
+
+                        barcodes.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inputValue = ids.getText().toString().trim();
+
+                                if (inputValue.length() > 0) {
+                                    try {
+                                        dialog.dismiss();
+
+                                        bitmapBarcode = encodeAsBitmap(ids.getText().toString(), BarcodeFormat.CODE_128, 600, 300);
+
+                                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                                        View mView = getLayoutInflater().inflate(R.layout.dialog_imageview, null);
+                                        mBuilder.setView(mView);
+
+                                        ImageView qr = (ImageView) mView.findViewById(R.id.dialog_imageview);
+                                        Button saveBarcode = (Button) mView.findViewById(R.id.btn_SaveQR);
+                                        final EditText note = (EditText) mView.findViewById(R.id.edt_note);
+
+                                        qr.setImageBitmap(bitmapBarcode);
+
+                                        dialog = mBuilder.create();
+                                        dialog.show();
+                                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+                                        saveBarcode.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                try {
+                                                    if (note.getText().toString().length() == 0) {
+                                                    note.setError("Required");
+                                                } else {
+
+                                                  /*  final File file = new File(savePath, System.currentTimeMillis() + ".jpg");
+                                                    FileOutputStream outs = null;
+                                                    final Bitmap bitmap = bitmapBarcode;
+                                                    try {
+                                                        outs = new FileOutputStream(file);
+                                                        if (bitmap != null) {
+                                                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outs);
+                                                        } else {
+                                                            throw new FileNotFoundException();
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    } finally {
+                                                        if (outs != null) {
+                                                            outs.flush();
+                                                            outs.close();
+
+                                                            if (bitmap != null) {*/
+                                                        File myDir = new File(savePath + "/sCanEz");
+                                                        myDir.mkdirs();
+                                                        Random generator = new Random();
+                                                        int n = 10000;
+                                                        n = generator.nextInt(n);
+                                                        String fname = "Image-"+ n +".jpg";
+                                                        File file = new File (myDir, fname);
+                                                        if (file.exists ()) file.delete ();
+                                                        try {
+                                                            FileOutputStream out = new FileOutputStream(file);
+                                                            bitmapBarcode.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                                            out.flush();
+                                                            out.close();
+
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                                Date c = Calendar.getInstance().getTime();
+                                                                System.out.println("Current time => " + c);
+
+                                                                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                                                                String formattedDate = df.format(c);
+
+                                                                Qrnotes = note.getText().toString();
+
+                                                                Data newProduct = new Data(Qrnotes, "Barcode", formattedDate, file.getPath());
+                                                                myDb.addProduct(newProduct);
+
+                                                                dialog.dismiss();
+                                                                Toast.makeText(getContext(), "Saved successfully", Toast.LENGTH_LONG).show();
+
+                                                            }
+                                                } catch (Exception es) {
+                                                    es.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    } catch (WriterException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    ids.setError("Required");
+                                }
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public boolean onDenied(HashMap<String, Boolean> rationalizablePermissions) {
+                        Log.e("log---::", "Permission Denied");
+
+                        return true;
+                    }
+                });
+                PiemissionsUtils.requestPermission(request);
 
                 break;
             case R.id.edt_nameOrid:
@@ -541,7 +732,15 @@ public class Dashboard_Fragment extends BaseFragment {
                             name.setText(searchname);
                             date.setText(searchdate);
                             type.setText(searchtype);
-                            Picasso.get().load(searchUser).into(code_image);
+
+
+                            File imgFile = new  File(searchUser);
+                            if(imgFile.exists()){
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                code_image.setImageBitmap(myBitmap);}else {
+                                code_image.setImageResource(R.drawable.holderimage);
+                            }
+
                             dialog = builder.create();
                             dialog.show();
                         }else {
@@ -551,7 +750,6 @@ public class Dashboard_Fragment extends BaseFragment {
                     } else {
                         Toast.makeText(getActivity(), "No Data Found", Toast.LENGTH_SHORT).show();
                     }
-
                 break;
         }
     }
@@ -600,6 +798,5 @@ public class Dashboard_Fragment extends BaseFragment {
         }
         return null;
     }
-
 
 }

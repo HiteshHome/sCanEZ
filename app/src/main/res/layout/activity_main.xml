@@ -33,7 +33,7 @@
                             android:id="@+id/imgToolBarBack"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/dp_5"
+                            android:padding="@dimen/dp_10"
                             android:src="@drawable/back_icon"
                             android:visibility="gone" />
 
@@ -42,7 +42,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
-                            android:padding="@dimen/dp_5"
+                            android:padding="@dimen/dp_10"
                             android:src="@drawable/menu_icon"
                             android:visibility="gone" />
                     </RelativeLayout>
@@ -60,7 +60,12 @@
                         android:gravity="center"
                         android:textColor="@android:color/white"
                         android:textSize="20sp" />
-
+                    <ImageView
+                        android:id="@+id/imgToolBarMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_10"
+                        android:visibility="visible" />
                 </LinearLayout>
 
 
@@ -104,63 +109,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/sl_image" />
-            <LinearLayout
-                android:id="@+id/selectqr"
-                android:layout_marginTop="@dimen/dp_60"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/nav_qr"/>
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/generate_qr_code"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/sp_20" />
-            </LinearLayout>
-            <View
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorLightGray"/>
 
-            <LinearLayout
-                android:id="@+id/selectbarcode"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/nav_barcode"/>
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/generate_b_arcode"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/sp_20" />
-            </LinearLayout>
-            <View
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorLightGray"/>
 
             <LinearLayout
                 android:id="@+id/scan_qrcode"
-                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_60"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -234,13 +187,38 @@
                 android:layout_height="1dp"
                 android:background="@color/colorLightGray"/>
             <LinearLayout
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:id="@+id/appversion"
-                android:layout_marginTop="@dimen/dp_185"
+                android:id="@+id/click_aboutus"
+                android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/aboutus"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="About Us"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/sp_20" />
+            </LinearLayout>
+            <View
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorLightGray"/>
+            <LinearLayout
+                android:gravity="center|bottom"
+                android:layout_gravity="center|bottom"
+                android:id="@+id/appversion"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
@@ -251,7 +229,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1.0"
+                    android:text="@string/_1_0_0"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/sp_16" />
             </LinearLayout>
